@@ -18,26 +18,12 @@ void UART1_Init(void) {
     
     U1BRG = BRGVAL; // baudrate setting
     
+    U1STAbits.UTXISEL0 = 0; // Interrupt after one TX Character is transmitted
+    U1STAbits.UTXISEL1 = 0;
+    
     U1MODEbits.UARTEN = 1; // enbale UART1
     U1STAbits.UTXEN = 1; // enable TX
-    U1STAbits.URXDA = 1; // enab RX
     IEC0bits.U1RXIE = 1;   // enable RX interrupt
-}
-
-// writes a character to the UART1 using a circular buffer
-// This function pushes the character into the circular buffer and enables the TX interrupt
-void UART1_WriteChar(char c) {
-    while (U1STAbits.UTXBF); // wait Tx buffer to be empty
-    U1TXREG = c; // send character
-    
-    //IEC0bits.U1TXIE = 0; // Disable TX interrupt
-    //cb_push(cb_tx, c);  // Push the character into the TX buffer
-    //IEC0bits.U1TXIE = 1; // Enable TX interrupt
-}
-
-// reads a character from the UART1
-char UART1_ReadChar(void) {
-    return U1RXREG;
 }
 
 //circular buffer
@@ -48,13 +34,13 @@ void cb_init(CircularBuffer *cb) {
 }
 
 void cb_push(CircularBuffer *cb, char value) {
-    
+    if (cb->count == BUFFER_SIZE){
+         // Buffer full: overwrite oldest
+        cb->tail = (cb->tail + 1) % BUFFER_SIZE;
+        cb->count--;
+    }
     cb->buffer[cb->head] = value; // write the value
     cb->head = (cb->head + 1) % BUFFER_SIZE; // increment circularly
-    if (cb->count == BUFFER_SIZE){
-        cb->tail = (cb->tail + 1) % BUFFER_SIZE;
-        return; // buffer is full, overwrite the oldest value, don't increment count
-    }
     cb->count++;
 }
 

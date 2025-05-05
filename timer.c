@@ -165,7 +165,7 @@ void tmr_wait_ms(int timer, int ms){
     }
     
     if(timer == 1){
-        PR1 = (int) ((Fcy / 256) * (ms / 1000.0));
+        PR1 = (int) ((Fcy / 256) * (remaining / 1000.0));
     
         T1CONbits.TCS = 0;
         TMR1 = 0; // reset timer counter

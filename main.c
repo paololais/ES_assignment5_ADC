@@ -13,6 +13,26 @@
 #include "stdio.h"
 #include "string.h"
 
+CircularBuffer cb_tx;
+
+// Interrupt UART TX
+void __attribute__((__interrupt__, __auto_psv__)) _U1TXInterrupt() {
+    IFS0bits.U1TXIF = 0; // Clear the TX interrupt flag
+    
+    char c;
+    
+    while(U1STAbits.UTXBF == 0){
+        // If there are characters in the TX buffer, send them
+        if (!cb_is_empty(&cb_tx)) {
+            cb_pop(&cb_tx, &c); // Pop a character from the TX buffer
+            U1TXREG = c;        // Write the character to the UART TX register
+        } else {
+            IEC0bits.U1TXIE = 0;
+            break;
+        }
+    }
+}
+
 int main(void) {
     // Disable all analog inputs first
     ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
@@ -21,6 +41,8 @@ int main(void) {
     ANSELBbits.ANSB11 = 1;
     
     adc_init();
+    
+    cb_init(&cb_tx);
     
     unsigned int adc_val;
     char buffer[32];
@@ -41,10 +63,11 @@ int main(void) {
         v_battery = v_sense * 3; // Partitore: BAT-VSENSE = Vbat / 3
 
         sprintf(buffer, "ADC=%u*", adc_val);
+        IEC0bits.U1TXIE = 0;
         for (int i = 0; i < strlen(buffer); i++) {
-            UART1_WriteChar(buffer[i]);
+            cb_push(&cb_tx, buffer[i]);
         }
-        memset(buffer, 0, sizeof(buffer));
+        IEC0bits.U1TXIE = 1;
         
 
         tmr_wait_ms(500);           // Delay between samples
