@@ -70,7 +70,7 @@ int main(void) {
         IEC0bits.U1TXIE = 1;
         
 
-        tmr_wait_ms(500);           // Delay between samples
+        tmr_wait_ms(TIMER1, 500);           // Delay between samples
     }
     
     return 0;
