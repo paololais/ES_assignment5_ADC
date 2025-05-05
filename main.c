@@ -67,7 +67,10 @@ void readDistance(){
     AD1CON1bits.SAMP = 0;       // Auto conversion starts
 
     while (!AD1CON1bits.DONE);  // Wait for conversion complete
-    float voltage = ADC1BUF0;         // Read ADC value
+    //float voltage = ADC1BUF0;         // Read ADC value
+    
+    unsigned int adc_val = ADC1BUF0; // Raw ADC value
+    float voltage = (ADC1BUF0 / 1023.0) * 3.3;
 
     float v2 = voltage * voltage;
     float v3 = v2 * voltage;
@@ -75,7 +78,8 @@ void readDistance(){
 
     float distance = 2.34 - 4.74 * voltage + 4.06 * v2 - 1.60 * v3 + 0.24 * v4;
 
-    sprintf(buffer, "IR=%.2fV*\r\n", distance);
+    //sprintf(buffer, "ADC=%u, V=%.2fV\r\n", adc_val, voltage); //check voltage reading
+    sprintf(buffer, "IR=%.2fV\r\n", distance);
     
     IEC0bits.U1TXIE = 0;
     for (int i = 0; i < strlen(buffer); i++) {
