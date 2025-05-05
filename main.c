@@ -62,7 +62,7 @@ int main(void) {
         v_sense = (adc_val / 1023.0) * 3.3; // Tensione sul BAT-VSENSE
         v_battery = v_sense * 3; // Partitore: BAT-VSENSE = Vbat / 3
 
-        sprintf(buffer, "ADC=%u*", adc_val);
+        sprintf(buffer, "ADC=%f*", v_battery);
         IEC0bits.U1TXIE = 0;
         for (int i = 0; i < strlen(buffer); i++) {
             cb_push(&cb_tx, buffer[i]);
