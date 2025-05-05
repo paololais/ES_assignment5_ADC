@@ -28,12 +28,21 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef ADC_H
-#define	ADC_H
+#ifndef TIMER_H
+#define	TIMER_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
-void adc_init();
+// TODO Insert appropriate #include <>
+#define TIMER1 1
+#define TIMER2 2
+#define TIMER3 3
+
+void tmr_setup_period(int timer, int ms);
+//void tmr_wait_period(int timer); //assignment 1-2
+void tmr_wait_ms(int timer, int ms);
+int tmr_wait_period(int timer);
+
 
 #ifdef	__cplusplus
 extern "C" {
@@ -46,5 +55,5 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
-#endif	/* ADC_H */
+#endif	/* TIMER_H */
 

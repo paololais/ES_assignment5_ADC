@@ -28,12 +28,34 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef ADC_H
-#define	ADC_H
+#ifndef UART_H
+#define	UART_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
-void adc_init();
+#define BAUDRATE 9600UL
+#define FCY 72000000UL  
+#define BRGVAL ((FCY / (16 * BAUDRATE)) - 1)
+#define BUFFER_SIZE 32 // calculated based on the baudrate and the time it takes to send a character
+
+// circular buffer
+typedef struct {
+    char buffer[BUFFER_SIZE];
+    int head; // write index
+    int tail; // read index
+    int count; // number of elements in the buffer
+} CircularBuffer;
+
+void cb_init(CircularBuffer *cb);
+void cb_push(CircularBuffer *cb, char value);
+void cb_pop(CircularBuffer *cb, char *value);
+int cb_is_empty(CircularBuffer *cb);
+
+void UART1_Init();
+
+void UART1_WriteChar(char c);
+
+char UART1_ReadChar(void);
 
 #ifdef	__cplusplus
 extern "C" {
@@ -46,5 +68,5 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
-#endif	/* ADC_H */
+#endif	/* UART_H */
 
