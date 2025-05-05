@@ -42,6 +42,8 @@ int main(void) {
     
     adc_init();
     
+    UART1_Init(); // initialize UART1
+    
     cb_init(&cb_tx);
     
     unsigned int adc_val;
