@@ -30,6 +30,8 @@ void adc_init2() {
 
     ANSELBbits.ANSB4 = 1;
     
+    TRISBbits.TRISB4 = 1; // Imposta RB4 come input
+
     AD1CON1bits.ADON = 0;       // Turn off ADC to configure
     AD1CON1bits.AD12B = 0;      // 10-bit mode
     AD1CON1bits.FORM = 0;       // Integer output
@@ -41,7 +43,8 @@ void adc_init2() {
     AD1CON3bits.SAMC = 16;       // Not used for manual sampling
     AD1CON3bits.ADCS = 8;       // ADC conversion clock select (Tad)
 
-    AD1CHS0bits.CH0SA = 0;     // Select AN11 as input
+    //AD1CHS0bits.CH0SA = 0;     // Select AN11 as input
+    AD1CHS0bits.CH0SA = 4; // Seleziona AN4 (RB4)
 
     AD1CON1bits.ADON = 1;       // Turn on ADC
 }
