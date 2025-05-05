@@ -79,7 +79,7 @@ void readDistance(){
     float distance = 2.34 - 4.74 * voltage + 4.06 * v2 - 1.60 * v3 + 0.24 * v4;
 
     //sprintf(buffer, "ADC=%u, V=%.2fV\r\n", adc_val, voltage); //check voltage reading
-    sprintf(buffer, "IR=%.2fV\r\n", distance);
+    sprintf(buffer, "IR=%.2f cm\r\n", distance);
     
     IEC0bits.U1TXIE = 0;
     for (int i = 0; i < strlen(buffer); i++) {
