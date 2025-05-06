@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=ES_assignment5_ADC.X
+PROJECTNAME=ES_assignment5_ADC
 
 # Active Configuration
 DEFAULTCONF=default

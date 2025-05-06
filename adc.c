@@ -28,9 +28,9 @@ void adc_init2() {
     // ADC config
     ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
 
-    ANSELBbits.ANSB4 = 1;
+    ANSELBbits.ANSB5 = 1;
     
-    TRISBbits.TRISB4 = 1; // Imposta RB4 come input
+    TRISBbits.TRISB5 = 1; // Imposta RB5 come input
 
     AD1CON1bits.ADON = 0;       // Turn off ADC to configure
     AD1CON1bits.AD12B = 0;      // 10-bit mode
@@ -44,7 +44,7 @@ void adc_init2() {
     AD1CON3bits.ADCS = 8;       // ADC conversion clock select (Tad)
 
     //AD1CHS0bits.CH0SA = 0;     // Select AN11 as input
-    AD1CHS0bits.CH0SA = 4; // Seleziona AN4 (RB4)
+    AD1CHS0bits.CH0SA = 5; // Seleziona AN4 (RB4)
 
     AD1CON1bits.ADON = 1;       // Turn on ADC
 }

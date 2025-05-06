@@ -47,7 +47,7 @@ void readBattery() {
     adc_val = ADC1BUF0; // Read ADC result
 
     //conversion
-    v_sense = (adc_val / 1023.0) * 3.3; // Tensione sul BAT-VSENSE
+    v_sense = (adc_val / 1024.0) * 3.3; // Tensione sul BAT-VSENSE
     v_battery = v_sense * 3; // Partitore: BAT-VSENSE = Vbat / 3
 
     sprintf(buffer, "ADC=%f*", v_battery);
@@ -70,7 +70,7 @@ void readDistance(){
     //float voltage = ADC1BUF0;         // Read ADC value
     
     unsigned int adc_val = ADC1BUF0; // Raw ADC value
-    float voltage = (ADC1BUF0 / 1023.0) * 3.3;
+    float voltage = (ADC1BUF0 / 1024.0) * 3.3;
 
     float v2 = voltage * voltage;
     float v3 = v2 * voltage;
@@ -79,7 +79,7 @@ void readDistance(){
     float distance = 2.34 - 4.74 * voltage + 4.06 * v2 - 1.60 * v3 + 0.24 * v4;
 
     //sprintf(buffer, "ADC=%u, V=%.2fV\r\n", adc_val, voltage); //check voltage reading
-    sprintf(buffer, "IR=%.2f cm\r\n", distance);
+    sprintf(buffer, "IR=%.2f cm\r\n", distance * 100);
     
     IEC0bits.U1TXIE = 0;
     for (int i = 0; i < strlen(buffer); i++) {
@@ -87,7 +87,9 @@ void readDistance(){
     }
     IEC0bits.U1TXIE = 1;
 
-    tmr_wait_ms(TIMER1, 500);
+    tmr_wait_ms(TIMER1, 100);
+    tmr_wait_ms(TIMER1, 200);
+    tmr_wait_ms(TIMER1, 200);
 }
 
 int main(void) {   
@@ -96,13 +98,11 @@ int main(void) {
     UART1_Init(); // initialize UART1
     
     cb_init(&cb_tx);
-    
-    
+
     while(1){
         //readBattery();
         
         readDistance();
-        
     }
     
     return 0;
