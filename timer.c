@@ -107,15 +107,11 @@ int tmr_wait_period(int timer){
 /*
 void tmr_wait_ms(int timer, int ms){
     long int Fcy = 72000000;
-    // Formula: PRx = (Fcy / Prescaler) * (ms / 1000)
-    //PR1 = 56250;
-    
     int remaining = ms;
 
-    while ((remaining - ms) > 200) {
+    while (remaining > 200) {
         if (timer == 1) {
             PR1 = (int) ((Fcy / 256) * (200 / 1000.0));
-
             T1CONbits.TCS = 0;
             TMR1 = 0; // reset timer counter
             T1CONbits.TCKPS = 3; // prescaler 1:256
@@ -123,14 +119,11 @@ void tmr_wait_ms(int timer, int ms){
             T1CONbits.TON = 1; // starts the timer!
 
             while (IFS0bits.T1IF == 0);
+            T1CONbits.TON = 0;
             IFS0bits.T1IF = 0;
         }
         else if (timer == 2) {
-            //if(ms > 200) T2CONbits.T32 = 1;
-            if (ms > 200) return;
-
             PR2 = (int) ((Fcy / 256) * (200 / 1000.0));
-
             T2CONbits.TCS = 0;
             TMR2 = 0; // reset timer counter
             T2CONbits.TCKPS = 3; // prescaler 1:256
@@ -138,10 +131,10 @@ void tmr_wait_ms(int timer, int ms){
             T2CONbits.TON = 1; // starts the timer!
 
             while (IFS0bits.T2IF == 0);
+            T2CONbits.TON = 0;
             IFS0bits.T2IF = 0;
         } else if (timer == 3) {
             PR3 = (int) ((Fcy / 256) * (200 / 1000.0));
-
             T3CONbits.TCS = 0;
             TMR3 = 0; // reset timer counter
             T3CONbits.TCKPS = 3; // prescaler 1:256
@@ -149,6 +142,7 @@ void tmr_wait_ms(int timer, int ms){
             T3CONbits.TON = 1; // starts the timer!
 
             while (IFS0bits.T3IF == 0);
+            T3CONbits.TON = 1;
             IFS0bits.T3IF = 0;
         } else if (timer == 4) {
             PR4 = (int) ((Fcy / 256) * (200 / 1000.0));
@@ -160,15 +154,15 @@ void tmr_wait_ms(int timer, int ms){
             T4CONbits.TON = 1; // starts the timer!
 
             while (IFS1bits.T4IF == 0);
+            T4CONbits.TON = 0;
             IFS1bits.T4IF = 0;
         }
         
-        remaining = remaining - 200;
+        remaining -= 200;
     }
     
     if(timer == 1){
         PR1 = (int) ((Fcy / 256) * (remaining / 1000.0));
-    
         T1CONbits.TCS = 0;
         TMR1 = 0; // reset timer counter
         T1CONbits.TCKPS = 3; // prescaler 1:256
@@ -176,15 +170,12 @@ void tmr_wait_ms(int timer, int ms){
         T1CONbits.TON = 1; // starts the timer!
         
         while (IFS0bits.T1IF == 0);
+        T1CONbits.TON = 0;
         IFS0bits.T1IF = 0;
     }
     
     else if(timer == 2){
-        //if(ms > 200) T2CONbits.T32 = 1;
-        if(ms > 200) return;
-
         PR2 = (int) ((Fcy / 256) * (remaining / 1000.0));
-
         T2CONbits.TCS = 0;
         TMR2 = 0; // reset timer counter
         T2CONbits.TCKPS = 3; // prescaler 1:256
@@ -192,11 +183,11 @@ void tmr_wait_ms(int timer, int ms){
         T2CONbits.TON = 1; // starts the timer!
         
         while (IFS0bits.T2IF == 0);
+        T2CONbits.TON = 0;
         IFS0bits.T2IF = 0; 
     }
     else if(timer == 3){
         PR3 = (int) ((Fcy / 256) * (remaining / 1000.0));
-
         T3CONbits.TCS = 0;
         TMR3 = 0; // reset timer counter
         T3CONbits.TCKPS = 3; // prescaler 1:256
@@ -204,11 +195,11 @@ void tmr_wait_ms(int timer, int ms){
         T3CONbits.TON = 1; // starts the timer!
         
         while (IFS0bits.T3IF == 0);
+        T3CONbits.TON = 0;
         IFS0bits.T3IF = 0; 
     }
     else if(timer == 4){
         PR4 = (int) ((Fcy / 256) * (remaining / 1000.0));
-
         T4CONbits.TCS = 0;
         TMR4 = 0; // reset timer counter
         T4CONbits.TCKPS = 3; // prescaler 1:256
@@ -216,10 +207,9 @@ void tmr_wait_ms(int timer, int ms){
         T4CONbits.TON = 1; // starts the timer!
         
         while (IFS1bits.T4IF == 0);
+        T4CONbits.TON = 0;
         IFS1bits.T4IF = 0;  
-    }
-    
-
+    }    
 }
 */
 
